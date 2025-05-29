@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+ id         Int       @id @default(autoincrement())
+ login      String    @unique
+ email      String    @unique
+ phone      String    @unique
+ password   String
+ basket     BasketItem[]
+ created_at DateTime  @default(now())
+ updated_at DateTime?
+}
+
+model Product {
+ id          Int       @id @default(autoincrement())
+ title       String
+ price       Float
+ old_price   Float?
+ description String
+ basket_item BasketItem[]
+ images      ProductImage[]
+ features    ProductFeature[]
+ type        ProductType[]
+ created_at  DateTime  @default(now())
+ updated_at  DateTime?
+}
+
+model BasketItem {
+  id          Int       @id @default(autoincrement())
+  count       Int       @default(1)
+  user_id     Int       
+  user        User      @relation(fields: [user_id], references: [id])
+  product_id  Int
+  product     Product   @relation(fields: [product_id], references: [id])
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+}
+
+
+model ProductImage {
+  id          Int       @id @default(autoincrement())
+  src         String
+  product_id  Int
+  product     Product   @relation(fields: [product_id], references: [id])
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+}
+
+model ProductFeature {
+  id          Int       @id @default(autoincrement())
+  product_id  Int
+  product     Product   @relation(fields: [product_id], references: [id])
+  icon        String
+  title       String
+  value       String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+}
+
+model ProductType {
+  id          Int       @id @default(autoincrement())
+  title       String
+  product_id  Int
+  product     Product   @relation(fields: [product_id], references: [id])
+  filters     ProductFilter[]
+  created_at  DateTime  @default(now())
+  updated_at  DateTime?
+}
+
+model ProductFilter {
+  id           Int       @id @default(autoincrement())
+  title        String
+  type_id      Int
+  product_type ProductType  @relation(fields: [type_id], references: [id])
+  items        ProductFilterItem[]
+  created_at   DateTime  @default(now())
+  updated_at   DateTime?
+}
+
+model ProductFilterItem {
+  id            Int       @id @default(autoincrement())
+  title         String
+  filter_id     Int 
+  productFilter ProductFilter @relation(fields: [filter_id], references: [id])
+  created_at    DateTime  @default(now())
+  updated_at    DateTime?
+}

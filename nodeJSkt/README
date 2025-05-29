@@ -1,0 +1,12 @@
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{
+    "title": "Realme",
+    "filter": "price",
+    "order": "desc",
+    "offset": 0,
+    "limit": 5
+  }' \
+  http://localhost:5000/product/find_product
+
+  curl --header "Content-Type: application/json"   --request POST   --data '{"title":"Realme", "price": 500.00,"description":"The best phone" }'   http://localhost:5000/product/create_product
