@@ -1,0 +1,18 @@
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  name      String
+  category  String?
+  publisher String?
+  year      Int?
+  likes     Int?     @default(0)
+  author_id String?
+}
